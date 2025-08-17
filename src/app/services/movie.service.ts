@@ -181,7 +181,8 @@ export class MovieService {
           director: 'Christopher Nolan',
           cast: ['Leonardo DiCaprio', 'Marion Cotillard', 'Tom Hardy'],
           imdbRating: 8.8
-        }
+        },
+        
       ];
 
       sampleMovies.forEach(movieDto => {
