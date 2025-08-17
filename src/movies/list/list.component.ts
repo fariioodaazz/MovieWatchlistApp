@@ -34,14 +34,12 @@ export class ListComponent implements OnInit, OnDestroy {
   private subs: Subscription[] = [];
 
   ngOnInit(): void {
-    // الأفلام
     const s1 = this.movieService.movies$.subscribe(movies => {
       this.movies = movies;
       this.applyFilters();
     });
     this.subs.push(s1);
 
-    // الـ watchlist
     const s2 = this.watchlistService.getWatchlist().subscribe(ids => {
       this.watchlistIds = new Set(ids);
     });
