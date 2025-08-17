@@ -1,0 +1,35 @@
+<div class="watchlist-container">
+  <h2>My Watchlist</h2>
+
+  <ng-container *ngIf="watchlist$ | async as movies; else loading">
+    
+    <div *ngIf="movies.length > 0; else emptyWatchlist" class="watchlist-grid">
+      
+      <div *ngFor="let movie of movies" class="movie-card">
+        
+        <img class="movie-poster" 
+             [src]="movie.posterUrl || 'https://via.placeholder.com/220x330.png?text=No+Image'" 
+             [alt]="movie.title + ' Poster'">
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p>{{ movie.category }}</p>
+        </div>
+        <button class="btn-remove" (click)="removeFromWatchlist(movie.id)">
+          Remove
+        </button>
+      </div>
+    </div>
+
+    <ng-template #emptyWatchlist>
+      <div class="empty-state">
+        <p>Your watchlist is empty.</p>
+        <p>Go to the movie list to add some movies!</p>
+      </div>
+    </ng-template>
+
+  </ng-container>
+
+  <ng-template #loading>
+    <p>Loading watchlist...</p>
+  </ng-template>
+</div>
