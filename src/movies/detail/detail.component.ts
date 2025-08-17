@@ -1,5 +1,6 @@
+// src/movies/detail/detail.component.ts
 import { Component } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule, Location, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Movie, MovieService } from '../../core/services/movie.service';
 import { WatchlistService } from '../../core/services/watchlist.service';
@@ -7,9 +8,7 @@ import { WatchlistService } from '../../core/services/watchlist.service';
 @Component({
   selector: 'app-movie-detail',
   standalone: true,
-  // CommonModule here fixes the "number" pipe error,
-  // RouterModule is for any routerLink in this template.
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, DecimalPipe],
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css']
 })
@@ -36,11 +35,8 @@ export class DetailComponent {
   addToWatchlist() {
     if (!this.movie) return;
     this.watchlist.add(this.movie);
-    this.router.navigate(['/movies/watchlist']); // adjust if route is '/watchlist'
+    this.router.navigate(['/watchlist']); 
   }
 
-  // Fixes "Property 'back' does not exist..."
-  back() {
-    this.location.back();
-  }
+  back() { this.location.back(); }
 }

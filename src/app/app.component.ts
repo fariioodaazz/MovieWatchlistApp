@@ -1,39 +1,12 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
-// Components
-import { WatchlistComponent } from './watchlist/watchlist.component';
-import { DetailComponent } from './movies/detail/detail.component';
-import { AddComponent } from './movies/add/add.component';
-import { HomeComponent } from './movies/home/home.component';
-
-// Services
-import { WatchlistService } from './core/services/watchlist.service';
-import { MovieService } from './core/services/movie.service';
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    WatchlistComponent,
-    DetailComponent,
-    AddComponent,
-    HomeComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent },
-      { path: 'add', component: AddComponent },
-      { path: 'detail/:id', component: DetailComponent },
-      { path: 'watchlist', component: WatchlistComponent }
-    ])
-  ],
-  providers: [WatchlistService, MovieService],
-  bootstrap: [AppComponent]
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet],
+  template: `<router-outlet></router-outlet>`
 })
-export class AppModule {}
+export class AppComponent {
+  title: any;
+}

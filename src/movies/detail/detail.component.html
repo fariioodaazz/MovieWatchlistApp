@@ -1,7 +1,6 @@
-<div *ngIf="movie as m; else notFound" class="max-w-5xl mx-auto p-6 animate-detail">
-  <button (click)="back()"
-          class="text-sm mb-4 px-3 py-1 rounded-full border hover:bg-gray-50">
-    ← Back to list
+<div *ngIf="movie as m; else notFound" class="max-w-5xl mx-auto p-6">
+  <button (click)="back()" class="text-sm mb-4 px-3 py-1 rounded-full border hover:bg-gray-50">
+    ← Back
   </button>
 
   <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
@@ -19,9 +18,7 @@
 
       <p class="leading-7 text-gray-800 mb-4 whitespace-pre-line">{{ m.description }}</p>
 
-      <!-- Add to Watchlist -->
-      <button (click)="addToWatchlist()"
-              class="px-4 py-2 rounded-full border hover:bg-gray-50">
+      <button (click)="addToWatchlist()" class="px-4 py-2 rounded-full border hover:bg-gray-50">
         + Add to Watchlist
       </button>
     </div>

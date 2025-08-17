@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-// IMPORTANT: Movie must be exported from your movie.service.ts
 import { Movie } from './movie.service';
 
 @Injectable({ providedIn: 'root' })
