@@ -174,7 +174,7 @@ export class MovieService {
         {
           title: 'Inception',
           description: 'A thief who steals corporate secrets through dream-sharing technology.',
-          releaseYear: 2010,
+          releaseYear: 2011,
           category: Category.SciFi,
           rating: Rating.PG13,
           duration: 148,
