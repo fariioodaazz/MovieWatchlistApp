@@ -12,6 +12,7 @@ export interface Movie {
   category: string;
 }
 
+
 const NO_IMAGE = 'https://placehold.co/400x600?text=No+Image';
 
 @Injectable({ providedIn: 'root' })

@@ -1,38 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, switchMap, map } from 'rxjs';
-
-import { WatchlistService } from '../services/watchlist.service';
-import { MovieService } from '../services/movie.service';
-import { Movie } from '../interfaces/movie';
+import { RouterModule } from '@angular/router';
+import { WatchlistService } from '../core/services/watchlist.service';
+import { Movie } from '../core/services/movie.service';
 
 @Component({
   selector: 'app-watchlist',
   standalone: true,
-  imports: [CommonModule],
+  // IMPORTANT: RouterModule here fixes "Can't bind to 'routerLink'..."
+  imports: [CommonModule, RouterModule],
   templateUrl: './watchlist.component.html',
   styleUrls: ['./watchlist.component.css']
 })
-export class WatchlistComponent implements OnInit {
-  public watchlist$!: Observable<Movie[]>;
+export class WatchlistComponent {
+  movies: Movie[] = [];
+  readonly FALLBACK = 'https://placehold.co/400x600?text=No+Image';
 
-  constructor(
-    private watchlistService: WatchlistService,
-    private movieService: MovieService
-  ) {}
-
-  ngOnInit(): void {
-    this.watchlist$ = this.watchlistService.getWatchlist().pipe(
-      switchMap(watchlistIds => {
-        return this.movieService.getMovies().pipe(
-          map(allMovies => allMovies.filter(movie => watchlistIds.includes(movie.id)))
-        );
-      })
-    );
+  constructor(private watchlist: WatchlistService) {
+    this.watchlist.getMovies().subscribe(list => (this.movies = list));
   }
 
- 
-  removeFromWatchlist(movieId: string): void {
-    this.watchlistService.removeFromWatchlist(movieId);
+  onImgError(ev: Event) {
+    const img = ev.target as HTMLImageElement | null;
+    if (img && img.src !== this.FALLBACK) img.src = this.FALLBACK;
+  }
+
+  removeMovie(id: number) {
+    this.watchlist.remove(id);
+  }
+
+  clearList() {
+    this.watchlist.clear();
   }
 }

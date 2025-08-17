@@ -1,35 +1,32 @@
-<div class="watchlist-container">
-  <h2>My Watchlist</h2>
+<div class="max-w-7xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold">My Watchlist</h1>
+    <button *ngIf="movies.length" (click)="clearList()" class="px-3 py-1 rounded-full border hover:bg-gray-50">
+      Clear all
+    </button>
+  </div>
 
-  <ng-container *ngIf="watchlist$ | async as movies; else loading">
-    
-    <div *ngIf="movies.length > 0; else emptyWatchlist" class="watchlist-grid">
-      
-      <div *ngFor="let movie of movies" class="movie-card">
-        
-        <img class="movie-poster" 
-             [src]="movie.posterUrl || 'https://via.placeholder.com/220x330.png?text=No+Image'" 
-             [alt]="movie.title + ' Poster'">
-        <div class="movie-info">
-          <h3>{{ movie.title }}</h3>
-          <p>{{ movie.category }}</p>
+  <div *ngIf="!movies.length" class="text-center text-gray-600 p-10">
+    <p>Your watchlist is empty.</p>
+    <a routerLink="/movies/list" class="text-blue-600 hover:underline">Browse movies</a>
+  </div>
+
+  <div *ngIf="movies.length" class="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-6">
+    <div *ngFor="let m of movies" class="group rounded-2xl overflow-hidden border shadow-sm bg-white">
+      <a [routerLink]="['/movies', m.id]">
+        <img class="w-full h-[420px] object-cover"
+             [src]="m.posterUrl || FALLBACK"
+             [alt]="m.title"
+             (error)="onImgError($event)" />
+      </a>
+      <div class="p-3">
+        <h3 class="font-semibold text-lg leading-tight">{{ m.title }}</h3>
+        <p class="text-sm text-gray-600">{{ m.category }} • {{ m.releaseYear }}</p>
+        <div class="mt-3 flex gap-2">
+          <a [routerLink]="['/movies', m.id]" class="px-3 py-1 rounded-full border hover:bg-gray-50">Details</a>
+          <button (click)="removeMovie(m.id)" class="px-3 py-1 rounded-full border hover:bg-gray-50">Remove</button>
         </div>
-        <button class="btn-remove" (click)="removeFromWatchlist(movie.id)">
-          Remove
-        </button>
       </div>
     </div>
-
-    <ng-template #emptyWatchlist>
-      <div class="empty-state">
-        <p>Your watchlist is empty.</p>
-        <p>Go to the movie list to add some movies!</p>
-      </div>
-    </ng-template>
-
-  </ng-container>
-
-  <ng-template #loading>
-    <p>Loading watchlist...</p>
-  </ng-template>
+  </div>
 </div>
