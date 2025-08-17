@@ -1,97 +1,26 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
-
-import { MovieService } from '../../app/services/movie.service';
-import { WatchlistService } from '../../app/services/watchlist.service';
-
-import { TruncatePipe } from '../../app/pipes/truncate.pipe';
-import { Category } from '../../app/enums/category.enum';
-import { Movie } from '../../app/interfaces/movie';
+import { MovieService, Movie } from '../../core/services/movie.service';
 
 @Component({
-  selector: 'app-movie-list',
+  selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TruncatePipe],
+  imports: [CommonModule, RouterModule],
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit, OnDestroy {
-  private movieService = inject(MovieService);
-  private watchlistService = inject(WatchlistService);
-
+export class ListComponent implements OnInit {
   movies: Movie[] = [];
-  filtered: Movie[] = [];
-  categories: Category[] = Object.values(Category);
-  selectedCategory: Category | 'ALL' = 'ALL';
-  searchTerm = '';
+  readonly FALLBACK = 'https://placehold.co/400x600?text=No+Image';
 
-  
-  private watchlistIds = new Set<string>();
-
-  private subs: Subscription[] = [];
+  constructor(private movieSvc: MovieService) {}
 
   ngOnInit(): void {
-    const s1 = this.movieService.movies$.subscribe(movies => {
-      this.movies = movies;
-      this.applyFilters();
-    });
-    this.subs.push(s1);
-
-    const s2 = this.watchlistService.getWatchlist().subscribe(ids => {
-      this.watchlistIds = new Set(ids);
-    });
-    this.subs.push(s2);
+    this.movieSvc.getAll().subscribe(ms => this.movies = ms);
   }
 
-  onCategoryChange(value: Category | 'ALL'): void {
-    this.selectedCategory = value;
-    this.applyFilters();
-  }
-
-  onSearchChange(value: string): void {
-    this.searchTerm = value;
-    this.applyFilters();
-  }
-
-  private applyFilters(): void {
-    let data = [...this.movies];
-
-    if (this.selectedCategory !== 'ALL') {
-      data = data.filter(m => m.category === this.selectedCategory);
-    }
-
-    const term = this.searchTerm.trim().toLowerCase();
-    if (term) {
-      data = data.filter(m =>
-        m.title.toLowerCase().includes(term) ||
-        (m.description ?? '').toLowerCase().includes(term)
-      );
-    }
-
-    this.filtered = data;
-  }
-
-  isInWatchlist(movieId: string): boolean {
-    return this.watchlistIds.has(movieId);
-  }
-
-  toggleWatchlist(movieId: string): void {
-    if (this.isInWatchlist(movieId)) {
-      this.watchlistService.removeFromWatchlist(movieId).subscribe();
-    } else {
-      this.watchlistService.addToWatchlist(movieId).subscribe();
-    }
-  }
-
-  trackById(_: number, item: Movie): string {
-    return item.id;
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach(s => s.unsubscribe());
+  onImgError(ev: Event) {
+    const img = ev.target as HTMLImageElement | null;
+    if (img && img.src !== this.FALLBACK) img.src = this.FALLBACK;
   }
 }
-
