@@ -1,1 +1,78 @@
-<h3 class="text-xl font-semibold mb-3">Movies</h3>
+<div class="movie-list-page container">
+  <!-- Header + Filters -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <h2 class="m-0">Movies</h2>
+
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <label for="category" class="form-label m-0 me-2">Category</label>
+      <select
+        id="category"
+        class="form-select"
+        style="min-width: 220px"
+        [(ngModel)]="selectedCategory"
+        (ngModelChange)="onCategoryChange($event)">
+        <option [ngValue]="'ALL'">All</option>
+        <option *ngFor="let c of categories" [ngValue]="c">{{ c }}</option>
+      </select>
+
+      <input
+        type="text"
+        class="form-control"
+        style="min-width: 260px"
+        placeholder="Search title or description"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)" />
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="filtered.length === 0" class="alert alert-secondary" role="alert">
+    No movies found for the selected filter.
+  </div>
+
+  <!-- Grid -->
+  <div class="row g-4">
+    <div
+      class="col-12 col-sm-6 col-md-4 col-lg-3"
+      *ngFor="let movie of filtered; trackBy: trackById">
+
+      <div class="card h-100 shadow-sm">
+        <a class="ratio ratio-2x3" [routerLink]="['/movies', movie.id]">
+          <img
+            *ngIf="movie.posterUrl; else noPoster"
+            [src]="movie.posterUrl"
+            [alt]="movie.title"
+            class="card-img-top object-cover" />
+          <ng-template #noPoster>
+            <div class="no-poster d-flex align-items-center justify-content-center">
+              <span>No Poster</span>
+            </div>
+          </ng-template>
+        </a>
+
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title mb-1 text-truncate" [title]="movie.title">{{ movie.title }}</h5>
+
+          <div class="small text-muted mb-2">
+            <span class="badge bg-dark me-2">{{ movie.category }}</span>
+            <span class="badge bg-secondary">Rating: {{ movie.rating }}</span>
+          </div>
+
+          <p class="card-text mb-3">{{ movie.description | truncate:120:true }}</p>
+
+          <div class="mt-auto d-flex gap-2">
+            <a class="btn btn-outline-primary btn-sm" [routerLink]="['/movies', movie.id]">Details</a>
+            <button
+              type="button"
+              class="btn btn-sm"
+              [ngClass]="isInWatchlist(movie.id) ? 'btn-success' : 'btn-outline-success'"
+              (click)="toggleWatchlist(movie.id)">
+              {{ isInWatchlist(movie.id) ? 'In Watchlist' : 'Add to Watchlist' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
