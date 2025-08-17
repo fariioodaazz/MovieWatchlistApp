@@ -1,0 +1,17 @@
+.wrapper { padding: 1.25rem; }
+.back { border: none; background: transparent; cursor: pointer; margin-bottom: .75rem; }
+.card { display: grid; grid-template-columns: 200px 1fr; gap: 1.25rem; align-items: start; }
+.poster { width: 200px; height: 300px; object-fit: cover; border-radius: .75rem; }
+.info { display: flex; flex-direction: column; gap: .5rem; }
+.title { margin: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 1rem; color: #555; }
+.desc { line-height: 1.6; }
+.not-found { padding: 2rem; text-align: center; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-detail {
+  animation: fadeIn 350ms ease-out both;
+}

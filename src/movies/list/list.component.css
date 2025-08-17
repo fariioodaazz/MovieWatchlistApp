@@ -1,3 +1,11 @@
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-card {
+  animation: fadeSlideUp 400ms ease-out both;
+}
+
 .movie-list-page {
   padding-top: 0.5rem;
 }
