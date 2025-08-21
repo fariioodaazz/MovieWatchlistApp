@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,54 +18,73 @@ export class WatchlistService {
    * Add movie to watchlist
    */
   addToWatchlist(movieId: string): Observable<boolean> {
-    return new Observable(); // TODO: implement
+    const current = this.watchlistSubject.value;
+    if (!current.includes(movieId)) {
+      const updated = [...current, movieId];
+      this.watchlistSubject.next(updated);
+      this.saveWatchlistToStorage(updated);
+      return of(true);
+    }
+    return of(false);
   }
 
   /**
    * Remove movie from watchlist
    */
   removeFromWatchlist(movieId: string): Observable<boolean> {
-    return new Observable(); // TODO: implement
+    const current = this.watchlistSubject.value;
+    if (current.includes(movieId)) {
+      const updated = current.filter(id => id !== movieId);
+      this.watchlistSubject.next(updated);
+      this.saveWatchlistToStorage(updated);
+      return of(true);
+    }
+    return of(false);
   }
 
   /**
    * Check if movie is in watchlist
    */
   isInWatchlist(movieId: string): Observable<boolean> {
-    return new Observable(); // TODO: implement
+    return of(this.watchlistSubject.value.includes(movieId));
   }
 
   /**
    * Get all watchlist movie IDs
    */
   getWatchlist(): Observable<string[]> {
-    return this.watchlist$; // TODO: extend if needed
+    return this.watchlist$;
   }
 
   /**
    * Clear entire watchlist
    */
   clearWatchlist(): Observable<boolean> {
-    return new Observable(); // TODO: implement
+    this.watchlistSubject.next([]);
+    this.saveWatchlistToStorage([]);
+    return of(true);
   }
 
   /**
    * Get watchlist count
    */
   getWatchlistCount(): Observable<number> {
-    return new Observable(); // TODO: implement
+    return of(this.watchlistSubject.value.length);
   }
 
-  // Placeholder for future MovieService integration
-  // getWatchlistMovies(): Observable<Movie[]> {
-  //   return new Observable(); // TODO: implement with MovieService
-  // }
-
   private saveWatchlistToStorage(watchlist: string[]): void {
-    // TODO: implement localStorage save
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(watchlist));
   }
 
   private loadWatchlistFromStorage(): void {
-    // TODO: implement localStorage load
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      if (stored) {
+        this.watchlistSubject.next(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error('Failed to load watchlist from storage', e);
+      this.watchlistSubject.next([]);
+    }
   }
 }
