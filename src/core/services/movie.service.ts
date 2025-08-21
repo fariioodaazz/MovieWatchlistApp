@@ -1,17 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { CreateMovieDto } from '../../app/interfaces/movie';
+import { Movie } from '../../app/interfaces/movie';
+import { Category } from '../../app/enums/category.enum';
+import { Rating } from '../../app/enums/rating.enum';
 
-export interface Movie {
-  id: number;
-  title: string;
-  posterUrl: string;
-  description: string;
-  releaseYear: number;
-  director: string;
-  rating: number;
-  category: string;
-}
 
 const NO_IMAGE = 'https://placehold.co/400x600?text=No+Image';
 
@@ -25,8 +18,8 @@ export class MovieService {
       description: `A groundbreaking sci-fi classic that questions the very fabric of reality...`,
       releaseYear: 1999,
       director: 'The Wachowskis',
-      rating: 8.7,
-      category: 'SCI_FI'
+      rating: Rating.R,
+      category: Category.SciFi
     },
     {
       id: 2,
@@ -35,8 +28,8 @@ export class MovieService {
       description: `A mind-bending thriller that dives into the architecture of dreams...`,
       releaseYear: 2010,
       director: 'Christopher Nolan',
-      rating: 8.8,
-      category: 'SCI_FI'
+      rating: Rating.NC17,
+      category: Category.SciFi
     },
     {
       id: 3,
@@ -45,8 +38,8 @@ export class MovieService {
       description: `The epic continuation of Frank Herbert’s legendary saga...`,
       releaseYear: 2024,
       director: 'Denis Villeneuve',
-      rating: 8.6,
-      category: 'SCI_FI'
+      rating: Rating.PG13,
+      category: Category.SciFi
     },
     {
       id: 4,
@@ -55,11 +48,11 @@ export class MovieService {
       description: `A sweeping historical drama chronicling the life of J. Robert Oppenheimer...`,
       releaseYear: 2023,
       director: 'Christopher Nolan',
-      rating: 8.9,
-      category: 'BIOGRAPHY'
+      rating: Rating.R,
+      category: Category.Adventure
     }
   ];
-
+  
   private movies$ = new BehaviorSubject<Movie[]>([...this.movies]);
 
   getAll(): Observable<Movie[]> {
@@ -79,10 +72,10 @@ export class MovieService {
       id: nextId,
       title: dto.title,
       posterUrl: dto.posterUrl || NO_IMAGE,
-      description: dto.description ?? '',
+      description: dto.description,
       releaseYear: dto.releaseYear,
-      director: dto.director ?? '',
-      rating: Number(dto.imdbRating ?? dto.rating ?? 0),
+      director: dto.director,
+      rating: dto.rating,
       category: dto.category
     };
 

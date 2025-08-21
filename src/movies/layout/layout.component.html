@@ -24,7 +24,7 @@
     </button>
   </nav>
 
-  <div *ngIf="mobileOpen" class="md:hidden border-t bg-white">
+  <div [hidden]="!mobileOpen" class="md:hidden border-t bg-white">
     <ul class="container py-2 space-y-1">
       <li><a (click)="mobileOpen=false" routerLink="/movies/list" class="block py-2">Home</a></li>
       <li><a (click)="mobileOpen=false" routerLink="/movies/add" class="block py-2">Add Movie</a></li>
@@ -34,6 +34,7 @@
       </button></li>
     </ul>
   </div>
+  
 </header>
 
 <main class="container py-6">

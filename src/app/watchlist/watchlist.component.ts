@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { WatchlistService } from '../../core/services/watchlist.service';
-import { Movie } from '../../core/services/movie.service';
+import { Movie } from '../../app/interfaces/movie';
 
 @Component({
   selector: 'app-watchlist',

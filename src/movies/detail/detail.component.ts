@@ -2,8 +2,9 @@
 import { Component } from '@angular/core';
 import { CommonModule, Location, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Movie, MovieService } from '../../core/services/movie.service';
+import { MovieService } from '../../core/services/movie.service';
 import { WatchlistService } from '../../core/services/watchlist.service';
+import { Movie } from '../../app/interfaces/movie';
 
 @Component({
   selector: 'app-movie-detail',

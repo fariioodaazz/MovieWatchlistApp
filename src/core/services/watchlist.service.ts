@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Movie } from './movie.service';
+import { Movie } from '../../app/interfaces/movie';
 
 @Injectable({ providedIn: 'root' })
 export class WatchlistService {
